@@ -1,0 +1,33 @@
+{
+  "questions": [
+    {
+      "id": 0,
+      "question": "How are you?",
+      "paths": {
+        "good": 1,
+        "bad": 2
+      },
+      "done": false
+    },
+    {
+      "id": 1,
+      "question": "what is new?",
+      "paths": {
+        "nothing": 3
+      },
+      "done": false
+    },
+    {
+      "id": 2,
+      "question": "I am sorry to hear that. Bye bye!!!",
+      "paths": {},
+      "done": true
+    },
+    {
+      "id": 3,
+      "question": "See ya!!!",
+      "paths": {},
+      "done": true
+    }
+  ]
+}
