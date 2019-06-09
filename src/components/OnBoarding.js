@@ -6,47 +6,62 @@ import { questions } from '../questions.json'
 
 const gen = new QuestionsGen(questions)
 
-export default function OnBoarding (props) {
-  const [messages, setMessages] = React.useState([gen.getNextQuestion()])
+export default class OnBoarding extends React.Component {
+  state = {
+    messages: [gen.getNextQuestion()],
+    isConnected: false,
+    status: 'onboarding'
+  }
   
-  const addMessage = (message) => {
-    if (gen.validate(message) && gen.isNext(message)){
-      setMessages([
-        ...messages,
-        message,
-        gen.getNextQuestion()
-      ])
-      // setTimeout(() => {
-      //   console.log(messages)
-      //   const nMessages = messages.map(item => item)
-      //   nMessages.push(gen.getNextQuestion())
-      //   setMessages(nMessages)
-      // }, 1000)
-    } else {
-      setMessages([
-        ...messages,
-        message
-      ])
+  addMessage = (message) => {
+    if(gen.validate(message) && gen.isNext(message)){
+      this.setState((oldState, props) => {
+        console.log(gen.isEnd())
+        return {
+          ...oldState,
+          status: (gen.isEnd() ? 'onboard' : oldState.status),
+          messages: [
+            ...oldState.messages,
+            message,
+            gen.getNextQuestion()
+          ]
+        }
+      }, this.focus)
     }
   }
 
-  const getDOMElement = (el) => el
-  // const addMessage = (message) => {
-  //   const nMessages = messages.map(item => item)
-  //   nMessages.push(message)
-  //   let value = gen.next(message).value
-  //   if(!value){
-  //     props.setStatus('pationt')
-  //   } else {
-  //     nMessages.push(value.question)
-  //   }
-  //   setMessages(nMessages) 
-  // }
+  connect = () => {
+    const socket = new WebSocket('wss://echo.websocket.org')
+
+    socket.onopen = () => {
+      this.setState((oldState, props) => {
+        return {
+          ...oldState,
+          isConnected: true,
+          messages: [
+            ...oldState.messages,
+            'Doctor is now connected'
+          ]
+        }
+      }, this.focus)
+    }
+  }
+
+  focus = () => {
+    this.refs[this.state.messages.length - 1].scrollIntoView()
+  }
   
-  return (
-    <React.Fragment>
-      <List messages={messages} onMessage={addMessage}/>
-      {/* <Form onMessage={addMessage} getDOM={getDOMElement}/> */}
-    </React.Fragment>
-  )
+  render(){
+    return (
+      <React.Fragment>
+        <ul>
+          {this.state.messages.map((message, index) => {
+            return <li key={index} ref={index}>{message}</li>
+          })}
+        </ul>
+        {this.state.status === 'onboard' && !this.state.isConnected && <button onClick={this.connect}>Connect To Doctor</button>}
+        <Form onMessage={this.addMessage} />
+      </React.Fragment>
+    )
+  }
 }
