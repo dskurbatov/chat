@@ -18,7 +18,7 @@ const App = (props) => {
   const [status, setStatus] = React.useState('onboarding')
   
   return (
-    <div>
+    <div className="chat">
       <h1>Hello World!!!</h1>
       <Room status={status} setStatus={setStatus} />
     </div>

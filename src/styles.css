@@ -11,3 +11,17 @@ html, body, #root {
   justify-content: center;
   border: 2px solid brown;
 }
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  width: 300px;
+  border: 1px solid blue;
+}
+
+ul {
+  height: 200px;
+  overflow-y: scroll;
+  scroll-behavior: smooth; 
+}
