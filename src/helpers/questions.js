@@ -1,7 +1,46 @@
-export function *questionGenerator(q, id){
-  while(!q[id].done){
-    let answer = yield q[id]
-    id = q[id].paths[answer]
+export class QuestionsGen {
+  constructor(questions){
+    this.questions = questions
+    this.id = 1
   }
-  yield q[id]
+
+  isNext(answer){
+    if(!this.questions[this.id].paths){
+      return false
+    }
+    
+    if(typeof this.questions[this.id].paths !== 'number'){
+      this.id = this.questions[this.id].paths[answer]
+    } else {
+      console.log(this.questions[this.id].paths)
+      this.id = this.questions[this.id].paths
+    }
+
+    if(this.id < 0) {
+      this.id = 0
+    }
+    console.log(this.id)
+    return true 
+  }
+
+  getNextQuestion(){
+    return this.questions[this.id].question
+  }
+
+  validate(answer){
+    if(typeof this.questions[this.id].validation === 'boolean'){
+      return this.questions[this.id].validation
+    }
+
+    if(Array.isArray(this.questions[this.id].validation)){
+      return this.questions[this.id].validation.includes(answer)
+    }
+
+    if(typeof this.questions[this.id].validation === 'string'){
+      const reg = new RegExp(this.questions[this.id].validation)
+      return reg.test(answer)
+    }
+
+    return false
+  }
 }
