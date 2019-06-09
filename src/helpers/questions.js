@@ -4,6 +4,10 @@ export class QuestionsGen {
     this.id = 1
   }
 
+  isEnd(){
+    return this.id === 0 || this.id === this.questions.length - 1
+  }
+
   isNext(answer){
     if(!this.questions[this.id].paths){
       return false
@@ -19,7 +23,7 @@ export class QuestionsGen {
     if(this.id < 0) {
       this.id = 0
     }
-    console.log(this.id)
+    
     return true 
   }
 
