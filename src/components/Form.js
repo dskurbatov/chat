@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Form = (props) => {
+const Form = (props, context) => {
   const [value, setValue] = React.useState('')
-  
+
   const onClick = (e) => {
     e.preventDefault()
-    
+
     props.onMessage(value)
     setValue('')
   }
@@ -17,5 +17,6 @@ const Form = (props) => {
     </form>
   )
 }
+
 
 export default Form
