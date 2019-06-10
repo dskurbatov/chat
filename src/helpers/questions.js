@@ -4,8 +4,16 @@ export class QuestionsGen {
     this.id = 1
   }
 
-  isEnd(){
-    return this.id === 0 || this.id === this.questions.length - 1
+  isLast(){
+    return this.id === this.questions.length - 1
+  }
+
+  isFirst(){
+    return this.id = 0
+  }
+
+  getCurrentQuestionId(){
+    return this.id + 1
   }
 
   isNext(answer){
