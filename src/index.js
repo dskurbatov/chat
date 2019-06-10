@@ -1,7 +1,35 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 import App from './components/App'
 import url from './styles.css';
+import store from './redux/store'
 
+class Provider extends React.Component {
+  getChildContext(){
+    return {
+      store: this.props.store
+    }
+  }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+  render(){
+    return this.props.children
+  }
+}
+
+Provider.childContextTypes = {
+  store: PropTypes.object
+}
+
+const render = () => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>, 
+    document.getElementById('root')
+  )
+}
+
+store.subscribe(render)
+
+render()
