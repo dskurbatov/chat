@@ -55,10 +55,20 @@ function connectionReducer(state=false, action){
   }
 }
 
+function nameReducer(state="Rachel Green", action){
+  switch(action.type){
+    case 'SET_NAME':
+      return action.payload
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   questions: questionsReducer,
   answers: answersReducer,
   isTyping: typingReducer,
   isPatient: patientReducer,
-  isConnected: connectionReducer
+  isConnected: connectionReducer,
+  name: nameReducer
 })

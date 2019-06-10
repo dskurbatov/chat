@@ -4,6 +4,7 @@ const STOP_TYPING = 'STOP_TYPING'
 const START_TYPING = 'START_TYPING'
 const CHANGE_PATIENT_STATUS = 'CHANGE_PATIENT_STATUS'
 const CONNECTED = 'CONNECTED'
+const SET_NAME = 'SET_NAME'
 
 const urlToPUT = (id) => `https://jsonplaceholder.typicode.com/posts/${id}`
 
@@ -33,6 +34,13 @@ export const changePatientStatus = () => {
   return {
     type: CHANGE_PATIENT_STATUS,
     payload: true
+  }
+}
+
+export const setName = (name) => {
+  return {
+    type: SET_NAME,
+    payload: name
   }
 }
 
@@ -125,11 +133,9 @@ export const startTyping = () => {
 
 export const connectToSocket = () => {
   return (dispatch) => {
-    return (dispatch) => {
-      return new Promise((resolve, reject) => {
-        dispatch([{type: CONNECTED, payload: true}, addQuestion('Doctor is now connected')])
-        resolve()
-      })
-    }
+    return new Promise((resolve, reject) => {
+      dispatch([{type: CONNECTED, payload: true}, addQuestion('Doctor is now connected'), setName('Doctor Who')])
+      resolve()
+    })
   }
 } 
