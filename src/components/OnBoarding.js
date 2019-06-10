@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Form from './Form'
 import { QuestionsGen } from '../helpers/questions'
-import { questions } from '../questions.json'
 import { 
   connectToSocket,
   lastQuestion,
@@ -10,7 +9,8 @@ import {
   notValidAnswer,
   nextQuestion,
   firstQuestion
- } from '../redux/actions'
+} from '../redux/actions'
+import { List, Image, Ref } from 'semantic-ui-react'
 
 const jsonUrl = 'https://gist.githubusercontent.com/pcperini/97fe41fc42ac1c610548cbfebb0a4b88/raw/cc07f09753ad8fefb308f5adae15bf82c7fffb72/cerebral_challenge.json'
 
@@ -59,15 +59,17 @@ export default class OnBoarding extends React.Component {
   connect = () => {
     const { store } = this.context
     const socket = new WebSocket('wss://echo.websocket.org')
-
-    socket.onopen = () => {
-      store.dispatch(connectToSocket).then(() => this.focus())
+    socket.onopen = (message) => {
+      console.log(message)
+      store.dispatch(connectToSocket())
+        .then(() => this.focus())
     }
   }
 
   focus = () => {
-    const len = Object.keys(this.refs).length
-    this.refs[len - 1].scrollIntoView()
+    // console.log(this.refs)
+    // const len = Object.keys(this.refs).length
+    // this.refs[len - 1].scrollIntoView()
   }
 
   buildMessages = (questions, answers) => {
@@ -91,16 +93,25 @@ export default class OnBoarding extends React.Component {
   
   render(){
     const { store } = this.context
-    const { questions, answers, isTyping, isPatient, isConnected } = store.getState()
+    const { questions, answers, isTyping, isPatient, isConnected, name } = store.getState()
     const messages = this.buildMessages(questions, answers)
+    const firstName = name.split(' ')[0]
     
     return (
       <React.Fragment>
-        <ul>
+        <List>
           {messages.map((message, index) => {
-            return <li key={index} ref={index}>{message}</li>
+            return (
+              <List.Item key={index}>
+                <List.Icon name='marker' size='large' verticalAlign='middle' />
+                <List.Content>
+                  <List.Header>{firstName}</List.Header>
+                  <List.Description color="grey">{message}</List.Description>
+                </List.Content>
+              </List.Item>
+            )
           })}
-        </ul>
+        </List>
         <p>{isTyping ? 'typing...' : ''}</p>
         {isPatient && !isConnected && <button onClick={this.connect}>Connect To Doctor</button>}
        <Form onMessage={this.addMessage}/> 

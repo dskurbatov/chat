@@ -1,12 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import OnBoarding from './OnBoarding'
-import DoctorRoom from './DoctorRoom'
+import { Header, Icon } from 'semantic-ui-react'
+
 
 const App = (props, context) => { 
+  const { name } = context.store.getState()
   return (
     <div className="chat">
-      <h1>Hello World!!!</h1>
+      <Header as='h2'>
+        <Icon name='user' />
+        <Header.Content>{name}</Header.Content>
+      </Header>
       <OnBoarding />
     </div>
   )

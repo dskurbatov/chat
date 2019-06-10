@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Input, Icon } from 'semantic-ui-react'
 
 const Form = (props, context) => {
   const [value, setValue] = React.useState('')
@@ -11,10 +12,10 @@ const Form = (props, context) => {
   }
   
   return(
-    <form>
-      <input value={value} onChange={(e) => setValue(e.target.value)} />
-      <button onClick={onClick}>Submit</button>
-    </form>
+    <div>
+      <Input size="huge" placeholder="Type here" value={value} onChange={(e) => setValue(e.target.value)} />
+      <Button size='huge' color='blue' onClick={onClick}><Icon name='send' /></Button>
+    </div>
   )
 }
 
